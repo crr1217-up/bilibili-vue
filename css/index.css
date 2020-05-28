@@ -1,0 +1,218 @@
+html,body{
+    height:100%;
+    overflow-y: scroll;
+}
+.container{
+    height:100%;
+    overflow-y: scroll;
+}
+.header{
+    width:100%;
+    position: fixed;
+    left:0;
+    top:0;
+    z-index:3;
+    /* height:15vh; */
+    padding-bottom:15px;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    background-color: #fff;
+}
+.header .logo{
+    margin-left:12px;
+}
+.header .search{
+    width: 132px;
+    height: 24px;
+    margin-left: 5px;
+    border-radius: 12px;
+    background-color:  #f4f4f4;
+    font-size: 10px;
+    color: #999;
+    display:flex;
+    padding-left:10px;
+    align-items: center;
+}
+.header .search span{
+    width:92px;
+    margin-left:5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}   
+.user svg{
+    border-radius: 50%;
+}
+.header .button{
+    width:75px;
+    height:23px;
+    text-align: center;
+    line-height: 23px;
+    /* padding:5px 10px; */
+    font-size: 12px;
+    background-color: #fb7299;
+    color:#fff;
+    margin-right:10px;
+}
+.menu{
+    height:75px;
+    position: relative;
+    background-color:#fff;
+    border-bottom:1px solid #f4f4f4;
+}
+.nav{
+    width:100%;
+    padding-top: 15px;
+    /* padding-right:15%; */
+    position: fixed;
+    top:43px;
+    left:0;
+    z-index: 1;
+    white-space: nowrap;
+    overflow-x: scroll;
+    /* font-size:3.7vw; */
+    color: #505050;
+    padding-left:12px;
+    background-color: #fff;
+}
+.hideNav{
+    width:100%;
+    position: fixed;
+    top:57px;
+    left:0;
+    /* transform: translateX(-50%); */
+    z-index:2;
+    background-color:#fff;
+    text-align: center;
+    padding-left:15px;
+    
+    transition: top .3s;
+}
+.hideNav.hide{
+    top:-82px;
+}
+
+.nav::-webkit-scrollbar{
+    display:none;
+    /* position:relative; */
+}
+.nav li,.hideNav li{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 40px;
+    color: #757575;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav li.active{
+    color:#fb7299;
+    border-bottom: 2px solid #fb7299;
+}
+.hideNav li.active{
+    color:#fb7299;
+}
+.hideNav li.big{
+    margin-right:27px;
+}
+.down{
+    position: fixed;
+    width:15%;
+    z-index: 1;
+    background-color: #fff;
+    top:55px;
+    right: 0px;
+    text-align: center;
+}
+.down.Uparrow{
+    /* width:100vw; */
+    position: fixed;
+    width:100%;
+    height:30px;
+     top:184px;
+   left:0;
+   right:0;
+   z-index:2; 
+   background-color: #fff;
+    border-bottom: 1px solid #f4f4f4;
+    /* transform: translateX(-50%); */
+}
+.down.Uparrow svg{
+    position: absolute;
+    /* left:49%; */
+    top:0;
+    /* left:0; */
+}
+.hideNav.hide .down{
+    display: none;
+}
+
+.banner li{
+    padding-top: 25px;
+    width:100vw;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    transition: opacity .4s;
+}
+.banner li img{
+    width:95%;
+    border-radius: 8px;
+}
+
+.videoShow{
+    display: flex;
+    width:100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: absolute;
+    overflow: hidden;
+    left:0;
+    top:215px;
+}
+.videoShow li{
+    flex:1 0 46%;
+    position: relative;
+    /* text-align: center; */
+    /* margin */
+}
+.videoShow li img{
+    width:95%;
+}
+/* .videoShow li{
+    padding:
+} */
+.videoShow li.isOdd{
+    padding-left:4px;
+    margin-left:5px
+}
+.videoShow li .des{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color:#fff;
+    background-image: linear-gradient(rgba(33, 33, 33, 0), rgba(33, 33, 33, .5));
+    position: absolute;
+    top:82px;
+    left:7px;
+}
+.videoShow li .des svg{
+    fill:#fff;
+    margin-right:6px;
+}
+.videoShow li .des span{
+    margin-right:20px;
+}
+.videoShow li .title{
+    margin: 6px 6px 10px 0px;
+    height: 38px;
+    line-height: 20px;
+    font-size: 13px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
