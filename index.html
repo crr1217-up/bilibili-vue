@@ -87,11 +87,18 @@
                     <p class="title" v-cloak>{{video.title}}</p>
                 </a>
             </li>
+            <!-- 底部版权信息区 -->
+            <div class="info-bottom">
+                <p>哔哩哔哩 沪ICP备13002172号-3</p>
+                <p>信息网络传播视听节目许可证：0910417</p>
+            </div>
         </ul>
+        
     </div>
 
-
+    
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./common.js"></script>
     <script src="./vue.js"></script>
     <script>
         const vm=new Vue({
@@ -100,28 +107,84 @@
                 navList:[],
                 bannerList:[],
                 videoList:[],
+                videoCount:0,
                 isHide:true,
+                getData:false,
                 // isOdd:true,
                 activeIndex:0,
                 bannerStyle:[1,0,0]
                 
             },
             methods:{
-                showMenu(){
+                showMenu(){//隐藏或展示菜单列表
                     this.isHide=!this.isHide;
                 },
-                changeActive(index){
+                changeActive(index){//改变选中菜单选项
                     this.activeIndex=index;
                     if(!this.isHide){
                         this.isHide=true;
                     }
                 },
-                scrollGetData(){
-                    console.log(1111);
+                scrollGetData(){//滚动事件，滚动过程中请求数据
+                    const {scrollHeight,offsetHeight,scrollTop}=vm.$el;
+                    // console.log(vm.$el.scrollHeight,vm.$el.clientHeight,vm.$el.scrollTop);
+                    if(this.videoCount==this.videoList.length){
+                        return;
+                    }
+                    if(scrollHeight-offsetHeight-scrollTop<200 && !this.getData){
+                        this.getData=true;
+                        axios.get('/video',{
+                            params:{
+                                start:this.videoList.length,
+                                offset:12
+                            }
+                        }).then((res)=>{
+                            // console.log(res.data.data);
+                            this.videoList.push(...res.data);
+                            this.getData=false;
+                        })
+                    }
+                },
+                navCharge(res){//请求过后的回调函数
+                    this.navList = res.data;
+                },
+                bannerCharge(res){
+                    this.bannerList = res.data;
+                },
+                videoCharge(res){
+                    this.videoList=res.data;
+                    this.videoCount=res.count;
+                },
+                changePic(){//改变轮播图
+                    const bannerStyleArr = this.bannerStyle;
+                    var i =0;
+                    const self=this;
+                    setInterval(()=>{  
+                            var ele = bannerStyleArr[i];
+                            var mid = (i+1)%3;
+                            if(ele==1){
+                                vm.$set(bannerStyleArr,i,0);
+                                vm.$set(bannerStyleArr,mid,1);
+                            }      
+                            i++;
+                            i==3?i=0:"";
+                    },3000)
+                },
+                requestData(){//请求数据
+                    axios.all([axios.get("/nav"),axios.get('/banner'),axios.get('/video',{
+                        params:{
+                            start:0,
+                            offset:12
+                        }
+                    })]).then(axios.spread((navRes,bannerRes,videoRes)=>{
+                        this.navCharge(navRes);
+                        this.bannerCharge(bannerRes);
+                        this.videoCharge(videoRes);
+                    }));
                 }
             },
             computed:{
-                playList(){
+                playList(){//处理播放量或评论数量过大时的显示状况
                     return this.videoList.map(item => {
                         item.play = item.play > 10000 ? item.play / 10000 + '万' : item.play;
                         item.rank = item.rank > 10000 ? item.rank / 10000 + '万' : item.rank;
@@ -129,47 +192,14 @@
                     });
                 }
             },
-            created(){
-                axios.get("https://developer.duyiedu.com/vue/bz/nav").then((res)=>{
-                    this.navList = res.data.data;
-                });
-                axios.get('https://developer.duyiedu.com/vue/bz/banner').then((res)=>{
-                    this.bannerList = res.data.data;
-                    // console.log(res.data.data);
-                });
-                axios.get('https://developer.duyiedu.com/vue/bz/video',{
-                    params:{
-                        start:0,
-                        offset:12
-                    }
-                }).then((res)=>{
-                    this.videoList=res.data.data;
-                })
+            created(){//进行数据请求
+                this.requestData();
             },
-            mounted(){
-                const bannerStyleArr = this.bannerStyle;
-                var i =0;
-                const self=this;
-                setInterval(()=>{  
-                        var ele = bannerStyleArr[i];
-                        var mid = (i+1)%3;
-                        if(ele==1){
-                            vm.$set(bannerStyleArr,i,0);
-                            vm.$set(bannerStyleArr,mid,1);
-                        }      
-                        i++;
-                        i==3?i=0:"";
-                        // console.log(self.bannerStyle);                
-                },3000)
-                // this.$el.addEventListener("scroll",this.scrollGetData,false)
-                // const {}=vm.$el;
+            mounted(){//操作dom
+                this.changePic();
             }
         });
-        document.body.onscroll=()=>{
-            
-            const {scrollHeight,offsetHeight,scrollTop}=vm.$el;
-            console.log(vm.$el.scrollHeight,vm.$el.offsetHeight,vm.$el.scrollTop);
-        }
+        
     </script>
 </body>
 </html>
